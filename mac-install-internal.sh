@@ -696,12 +696,27 @@ chroot /arch pacman --noconfirm -S linux
 chroot /arch mkinitcpio -p linux
 
 cat > /arch/usr/lib/initcpio/hooks/custom <<EOL
-#!/usr/bin/ash
+#!/usr/bin/bash
+
 run_hook() {
     modprobe nvme
     echo 106b 2003 > /sys/bus/pci/drivers/nvme/new_id
 }
 EOL
+sleep 3
+
+chmod a+x /arch/usr/lib/initcpio/hooks/custom
+sleep 3
+
+sync
+sync
+sync
+sync
+sync
+sync
+
+ls /arch/usr/lib/initcpio/hooks/custom
+
 
 sed -i "s/base udev/base udev custom/" /arch/etc/mkinitcpio.conf
 
