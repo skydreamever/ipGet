@@ -696,7 +696,7 @@ chroot /arch pacman --noconfirm -S linux
 chroot /arch mkinitcpio -p linux
 
 cat > /arch/usr/lib/initcpio/hooks/custom <<EOL
-#!/usr/bin/bash
+#!/bin/bash
 
 run_hook() {
     modprobe nvme
