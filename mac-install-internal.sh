@@ -695,7 +695,7 @@ chroot /arch pacman --noconfirm -S linux
 # manage to add hooks
 chroot /arch mkinitcpio -p linux
 
-chroot /arch cat > /usr/lib/initcpio/hooks/custom <<EOL
+cat > /arch/usr/lib/initcpio/hooks/custom <<EOL
 #!/usr/bin/ash
 run_hook() {
     modprobe nvme
@@ -703,7 +703,7 @@ run_hook() {
 }
 EOL
 
-chroot /arch sed -i "s/base udev/base udev custom/" /etc/mkinitcpio.conf
+sed -i "s/base udev/base udev custom/" /arch/etc/mkinitcpio.conf
 
 chroot /arch mkinitcpio -p linux
 
