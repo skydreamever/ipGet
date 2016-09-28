@@ -691,6 +691,20 @@ chroot /arch ln -s /bin/true /sbin/fsck.aufs
 chroot /arch pacman --noconfirm -S linux
 
 # Needed or won't find the root device
+
+# manage to add hooks
+
+chroot /arch cat >/usr/lib/initcpio/hooks/custom <<EOL
+#!/usr/bin/ash
+run_hook() {
+    modprobe nvme
+    echo 106b 2003 > /sys/bus/pci/drivers/nvme/new_id
+}
+EOL
+
+chroot /arch sed -i "s/base udev/base udev custom/" /etc/mkinitcpio.conf
+
+
 chroot /arch mkinitcpio -p linux
 
 # New Macbook Retina April 2015 Release
@@ -737,7 +751,8 @@ mv /arch/var/cache/pacman/custom/* /arch/var/cache/pacman/pkg/
 ###############################################################################
 echo "Updating Databases"
 chroot /arch runuser -l user -c "yaourt -Syy"
-# chroot /arch runuser -l user -c "yaourt -S --noconfirm linux-mainline" 
+chroot /arch runuser -l user -c "yaourt -S --noconfirm linux-mainline"
+
 
 ###############################################################################
 # Restore pacman's security
