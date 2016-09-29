@@ -775,7 +775,7 @@ mv /arch/var/cache/pacman/custom/* /arch/var/cache/pacman/pkg/
 ###############################################################################
 echo "Updating Databases"
 chroot /arch runuser -l user -c "yaourt -Syy"
-chroot /arch runuser -l user -c "yaourt -S --noconfirm linux-mainline"
+# chroot /arch runuser -l user -c "yaourt -S --noconfirm linux-mainline"
 
 
 ###############################################################################
