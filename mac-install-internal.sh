@@ -696,13 +696,22 @@ chroot /arch pacman --noconfirm -S linux
 chroot /arch mkinitcpio -p linux
 
 cat > /arch/usr/lib/initcpio/hooks/custom <<EOL
-#!/bin/bash
+#!/usr/bin/ash
 
 run_hook() {
     modprobe nvme
     echo 106b 2003 > /sys/bus/pci/drivers/nvme/new_id
 }
 EOL
+
+cat > /arch/usr/lib/initcpio/install/custom <<EOL
+#!/bin/bash
+
+build() {
+    add_runscript
+}
+EOL
+
 sleep 3
 
 chmod a+x /arch/usr/lib/initcpio/hooks/custom
