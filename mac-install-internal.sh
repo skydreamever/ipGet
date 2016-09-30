@@ -162,7 +162,12 @@ cp /var/cache/pacman/custom/* /arch/var/cache/pacman/custom/
 ###############################################################################
 # Sync pacman database
 ###############################################################################
-chroot /arch pacman -Syy --noconfirm
+chroot /arch pacman -Syy --noconfirm 2> /dev/null
+chroot /arch pacman -Syy --noconfirm 2> /dev/null
+chroot /arch pacman -Syy --noconfirm 2> /dev/null
+chroot /arch pacman -Syy --noconfirm 2> /dev/null
+chroot /arch pacman -Syy --noconfirm 2> /dev/null
+chroot /arch pacman -Syy --noconfirm 2> /dev/null
 
 ###############################################################################
 # Have pacman use aria2 for downloads and give it extreme patience
