@@ -1,7 +1,5 @@
 #!/bin/bash
 
-trap "" 6
-
 #==============================================================================
 #==============================================================================
 #         Copyright (c) 2015 Jonathan Yantis
@@ -14,7 +12,7 @@ trap "" 6
 # Exit on any error whatsoever
 # since we don't actually modify the physical drive until the very end
 ###############################################################################
-set -e -u -o pipefail
+# set -e -u -o pipefail
 
 ###############################################################################
 # Get the model of this Mac/Macbook
@@ -164,7 +162,10 @@ cp /var/cache/pacman/custom/* /arch/var/cache/pacman/custom/
 ###############################################################################
 # Sync pacman database
 ###############################################################################
-chroot /arch pacman -Syy --noconfirm 2> /dev/null
+chroot /arch pacman -Syy --noconfirm
+chroot /arch pacman -Syy --noconfirm
+chroot /arch pacman -Syy --noconfirm
+
 
 ###############################################################################
 # Have pacman use aria2 for downloads and give it extreme patience
@@ -183,12 +184,12 @@ chroot /arch pacman --noconfirm --needed -U /var/cache/pacman/general/*.pkg.tar.
 # update after pushing packages from docker container to get the system
 # in the most up to date state.
 ###############################################################################
-chroot /arch pacman -Su --noconfirm 2> /dev/null
-chroot /arch pacman -Su --noconfirm 2> /dev/null
-chroot /arch pacman -Su --noconfirm 2> /dev/null
-chroot /arch pacman -Su --noconfirm 2> /dev/null
-chroot /arch pacman -Su --noconfirm 2> /dev/null
-chroot /arch pacman -Su --noconfirm 2> /dev/null
+chroot /arch pacman -Su --noconfirm
+chroot /arch pacman -Su --noconfirm
+chroot /arch pacman -Su --noconfirm
+chroot /arch pacman -Su --noconfirm
+chroot /arch pacman -Su --noconfirm
+chroot /arch pacman -Su --noconfirm
 
 ###############################################################################
 # Setup Infinality Fonts
@@ -747,7 +748,16 @@ mv /arch/var/cache/pacman/custom/* /arch/var/cache/pacman/pkg/
 echo "Updating Databases"
 chroot /arch runuser -l user -c "yaourt -Syy"
 chroot /arch runuser -l user -c "yaourt -S --noconfirm linux-mainline"
-
+if [ $? -eq 0 ];then
+  echo "success"
+else
+  chroot /arch runuser -l user -c "yaourt -S --noconfirm linux-mainline"
+  if [ $? -eq 0 ];then
+    echo "success"
+  else
+    chroot /arch runuser -l user -c "yaourt -S --noconfirm linux-mainline"
+  fi
+fi
 
 cat > /arch/usr/lib/initcpio/hooks/custom <<EOL
 #!/usr/bin/ash
