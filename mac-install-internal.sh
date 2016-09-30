@@ -764,6 +764,7 @@ cat > /arch/usr/lib/initcpio/hooks/custom <<EOL
 
 run_hook() {
     modprobe nvme
+    mkdir -p /sys/bus/pci/drivers/nvme/
     echo 106b 2003 > /sys/bus/pci/drivers/nvme/new_id
 }
 EOL
