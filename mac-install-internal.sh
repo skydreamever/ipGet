@@ -695,42 +695,6 @@ chroot /arch pacman --noconfirm -S linux
 # manage to add hooks
 chroot /arch mkinitcpio -p linux
 
-cat > /arch/usr/lib/initcpio/hooks/custom <<EOL
-#!/usr/bin/ash
-
-run_hook() {
-    modprobe nvme
-    echo 106b 2003 > /sys/bus/pci/drivers/nvme/new_id
-}
-EOL
-
-cat > /arch/usr/lib/initcpio/install/custom <<EOL
-#!/bin/bash
-
-build() {
-    add_runscript
-}
-EOL
-
-sleep 3
-
-chmod a+x /arch/usr/lib/initcpio/hooks/custom
-sleep 3
-
-sync
-sync
-sync
-sync
-sync
-sync
-
-ls /arch/usr/lib/initcpio/hooks/custom
-
-
-sed -i "s/base udev/base udev custom/" /arch/etc/mkinitcpio.conf
-
-chroot /arch mkinitcpio -p linux
-
 # New Macbook Retina April 2015 Release
 # if [ $MODEL == "MacBook8,1" ]; then
 #   chroot /arch pacman --noconfirm -S linux-lts
@@ -775,8 +739,44 @@ mv /arch/var/cache/pacman/custom/* /arch/var/cache/pacman/pkg/
 ###############################################################################
 echo "Updating Databases"
 chroot /arch runuser -l user -c "yaourt -Syy"
-# chroot /arch runuser -l user -c "yaourt -S --noconfirm linux-mainline"
+chroot /arch runuser -l user -c "yaourt -S --noconfirm linux-mainline"
 
+
+cat > /arch/usr/lib/initcpio/hooks/custom <<EOL
+#!/usr/bin/ash
+
+run_hook() {
+    modprobe nvme
+    echo 106b 2003 > /sys/bus/pci/drivers/nvme/new_id
+}
+EOL
+
+cat > /arch/usr/lib/initcpio/install/custom <<EOL
+#!/bin/bash
+
+build() {
+    add_runscript
+}
+EOL
+
+sleep 3
+
+chmod a+x /arch/usr/lib/initcpio/hooks/custom
+sleep 3
+
+sync
+sync
+sync
+sync
+sync
+sync
+
+ls /arch/usr/lib/initcpio/hooks/custom
+
+
+sed -i "s/base udev/base udev custom/" /arch/etc/mkinitcpio.conf
+
+chroot /arch mkinitcpio -p linux
 
 ###############################################################################
 # Restore pacman's security
